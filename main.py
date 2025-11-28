@@ -16,12 +16,12 @@ def main():
         x_max = float(input("x máximo (ej. 10): "))
 
     except ValueError:
-        print("Rango inválido. Usaré -10 a 10.")
+        print("Rango inválido. Usar -10 a 10.")
         x_min, x_max = -10.0, 10.0
 
 
     if x_min >= x_max:
-        print("x_min debe ser menor que x_max. Usaré -10 a 10")
+        print("x_min debe ser menor que x_max. Usar -10 a 10")
         x_min, x_max = -10, 10
 
 
