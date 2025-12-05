@@ -1,4 +1,4 @@
-from Lark import Lark, Transformer
+from lark import Lark, Transformer
 import numpy as np
 
 # Gramática de las expresiones matemáticas

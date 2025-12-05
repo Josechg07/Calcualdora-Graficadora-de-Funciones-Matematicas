@@ -1,4 +1,4 @@
-from graficador import generar_x, graficar
+from graficador import (generar_x, graficar)
 from parser_funciones import evaluar_con_lark
 
 
