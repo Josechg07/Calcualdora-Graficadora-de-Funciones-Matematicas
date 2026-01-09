@@ -11,6 +11,7 @@ GRAMATICA = r"""
 
 ?term: term "*" factor -> mul
      | term "/" factor -> div
+     | term factor -> mul
      | factor
 
 ?factor: factor "^" atom -> pot
