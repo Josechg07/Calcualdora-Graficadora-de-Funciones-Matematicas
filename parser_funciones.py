@@ -11,7 +11,7 @@ GRAMATICA = r"""
 
 ?term: term "*" factor -> mul
      | term "/" factor -> div
-     | term factor -> mul
+     | term "x" factor -> mul
      | factor
 
 ?factor: factor "^" atom -> pot
@@ -19,7 +19,7 @@ GRAMATICA = r"""
 
 ?atom: "-" atom            -> neg
      | NUMBER              -> numero
-     | "x"                 -> variable
+     | "X"                 -> variable
      | CONST               -> constante
      | NAME "(" expr ")"   -> funcion
      | "(" expr ")"
