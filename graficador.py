@@ -9,9 +9,8 @@ def generar_x(x_min=-10, x_max=10, puntos=1000):
 
 
 
-def graficar(x, lista_funciones):
-
-    plt.figure()
+def obtener_figura(x, lista_funciones):
+    fig = plt.figure()
     
     colores = ['blue', 'red', 'green', 'cyan', 'magenta', 'yellow', 'black']
     
@@ -30,5 +29,9 @@ def graficar(x, lista_funciones):
     plt.title("Gráfico de Funciones")
     plt.legend()
     plt.tight_layout()
+    return fig
+
+def graficar(x, lista_funciones):
+    fig = obtener_figura(x, lista_funciones)
     plt.show()
     

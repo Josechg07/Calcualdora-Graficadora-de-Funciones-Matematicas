@@ -9,7 +9,7 @@ GRAMATICA = r"""
      | expr "-" term   -> resta
      | term
 
-?term: term "*" factor -> mul
+?term: term factor -> mul
      | term "/" factor -> div
      | term "x" factor -> mul
      | factor
