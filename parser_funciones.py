@@ -10,6 +10,7 @@ GRAMATICA = r"""
      | term
 
 ?term: term factor -> mul
+     | term "*" factor -> mul
      | term "/" factor -> div
      | term "x" factor -> mul
      | factor
