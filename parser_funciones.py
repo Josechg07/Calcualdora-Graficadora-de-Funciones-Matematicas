@@ -106,6 +106,9 @@ class EvaluadorLark(Transformer):
             "log": np.log,
             "exp": np.exp,
             "sqrt": np.sqrt,
+            "sec": lambda t: 1 / np.cos(t),
+            "csc": lambda t: 1 / np.sin(t),
+            "ctg": lambda t: 1 / np.tan(t),
         }
 
         if nombre not in funciones:
