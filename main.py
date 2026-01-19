@@ -8,7 +8,7 @@ from parser_funciones import evaluar_con_lark
 class CalculadoraApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Calculadora Graficadora 2D")
+        self.root.title("Axis 2D")
         self.root.geometry("1000x800")
 
         # Variables
@@ -45,8 +45,8 @@ class CalculadoraApp:
         self.listbox_funciones = tk.Listbox(control_panel, height=10)
         self.listbox_funciones.pack(fill=tk.BOTH, expand=True, pady=(0, 5))
 
-        ttk.Button(control_panel, text="Eliminar Seleccionada", command=self.eliminar_funcion).pack(fill=tk.X, pady=(0, 5))
-        ttk.Button(control_panel, text="Limpiar Todo", command=self.limpiar_todo).pack(fill=tk.X, pady=(0, 5))
+        ttk.Button(control_panel, text="Eliminar Función Seleccionada", command=self.eliminar_funcion).pack(fill=tk.X, pady=(0, 5))
+        ttk.Button(control_panel, text="Limpiar Todas Las Funciones", command=self.limpiar_todo).pack(fill=tk.X, pady=(0, 5))
 
         # Panel de Gráfico (Derecha)
         self.graph_panel = ttk.Frame(main_frame)

@@ -109,6 +109,12 @@ class EvaluadorLark(Transformer):
             "sec": lambda t: 1 / np.cos(t),
             "csc": lambda t: 1 / np.sin(t),
             "ctg": lambda t: 1 / np.tan(t),
+            "sinh": np.sinh,
+            "cosh": np.cosh,
+            "tanh": np.tanh,
+            "sech": lambda t: 1/ np.cosh(t),
+            "csch": lambda t: 1/ np.sinh(t),
+            "ctgh": lambda t: 1/ np.tanh(t),
         }
 
         if nombre not in funciones:
