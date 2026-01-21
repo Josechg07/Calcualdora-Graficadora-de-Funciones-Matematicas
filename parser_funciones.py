@@ -100,6 +100,7 @@ class EvaluadorLark(Transformer):
         nombre = str(nombre_token)
 
         funciones = {
+            "sen": np.sin,
             "sin": np.sin,
             "cos": np.cos,
             "tan": np.tan,
