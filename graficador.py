@@ -23,8 +23,8 @@ def obtener_figura(x, lista_funciones, y_min=-10, y_max=10):
         ax.plot(x, y, label=f"f(x)={expresion}", color=color_actual)
 
     #Ejes
-    ax.axhline(0, linewidth=0.8, color='black')
-    ax.axvline(0, linewidth=0.8, color='black')
+    ax.axhline(0, linewidth=0.8, color='white')
+    ax.axvline(0, linewidth=0.8, color='white')
     
     # Colores de los ejes y texto
     ax.spines['bottom'].set_color('white')
