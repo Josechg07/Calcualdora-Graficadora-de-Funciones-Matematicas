@@ -9,10 +9,12 @@ def generar_x(x_min=-10, x_max=10, puntos=1000):
 
 
 
-def obtener_figura(x, lista_funciones):
+def obtener_figura(x, lista_funciones, y_min=-10, y_max=10):
     fig = plt.figure(facecolor='black')
     ax = fig.add_subplot(111)
     ax.set_facecolor('black')
+    ax.set_xlim(x.min(), x.max())
+    ax.set_ylim(y_min, y_max)
     
     colores = ['blue', 'red', 'green', 'cyan', 'magenta', 'yellow', 'white']
     

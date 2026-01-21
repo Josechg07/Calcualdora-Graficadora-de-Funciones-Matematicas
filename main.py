@@ -15,6 +15,8 @@ class CalculadoraApp:
         self.lista_funciones = []
         self.x_min_var = tk.StringVar(value="-10")
         self.x_max_var = tk.StringVar(value="10")
+        self.y_min_var = tk.StringVar(value="-10")
+        self.y_max_var = tk.StringVar(value="10")
         self.funcion_var = tk.StringVar()
 
         # Layout pricipal
@@ -25,12 +27,29 @@ class CalculadoraApp:
         control_panel = ttk.LabelFrame(main_frame, text="Controles", padding="10")
         control_panel.pack(side=tk.LEFT, fill=tk.Y, padx=(0, 10))
 
-        # Entradas de Rango
+        # Entradas de Rango X
         ttk.Label(control_panel, text="Rango X Min:").pack(anchor=tk.W, pady=(0, 5))
-        ttk.Entry(control_panel, textvariable=self.x_min_var).pack(fill=tk.X, pady=(0, 10))
+        entry_xmin = ttk.Entry(control_panel, textvariable=self.x_min_var)
+        entry_xmin.pack(fill=tk.X, pady=(0, 10))
+        entry_xmin.bind('<Return>', lambda e: self.actualizar_grafico())
 
         ttk.Label(control_panel, text="Rango X Max:").pack(anchor=tk.W, pady=(0, 5))
-        ttk.Entry(control_panel, textvariable=self.x_max_var).pack(fill=tk.X, pady=(0, 10))
+        entry_xmax = ttk.Entry(control_panel, textvariable=self.x_max_var)
+        entry_xmax.pack(fill=tk.X, pady=(0, 10))
+        entry_xmax.bind('<Return>', lambda e: self.actualizar_grafico())
+
+        # Entradas de Rango Y
+        ttk.Label(control_panel, text="Rango Y Min:").pack(anchor=tk.W, pady=(0, 5))
+        entry_ymin = ttk.Entry(control_panel, textvariable=self.y_min_var)
+        entry_ymin.pack(fill=tk.X, pady=(0, 10))
+        entry_ymin.bind('<Return>', lambda e: self.actualizar_grafico())
+
+        ttk.Label(control_panel, text="Rango Y Max:").pack(anchor=tk.W, pady=(0, 5))
+        entry_ymax = ttk.Entry(control_panel, textvariable=self.y_max_var)
+        entry_ymax.pack(fill=tk.X, pady=(0, 10))
+        entry_ymax.bind('<Return>', lambda e: self.actualizar_grafico())
+
+        ttk.Button(control_panel, text="Actualizar Rango", command=self.actualizar_grafico).pack(fill=tk.X, pady=(0, 10))
 
         # Entrada de Función
         ttk.Label(control_panel, text="Nueva Función f(x):").pack(anchor=tk.W, pady=(10, 5))
@@ -104,11 +123,16 @@ class CalculadoraApp:
         try:
             x_min = float(self.x_min_var.get())
             x_max = float(self.x_max_var.get())
+            y_min = float(self.y_min_var.get())
+            y_max = float(self.y_max_var.get())
         except ValueError:
             return # Esperar a que sean números válidos
 
         if x_min >= x_max:
              return
+        
+        if y_min >= y_max:
+            return
 
         x = generar_x(x_min, x_max, puntos=1000)
         
@@ -122,7 +146,7 @@ class CalculadoraApp:
             except Exception as e:
                 print(f"Error al graficar {expresion}: {e}")
         
-        fig = obtener_figura(x, datos_para_graficar)
+        fig = obtener_figura(x, datos_para_graficar, y_min, y_max)
         
         self.canvas = FigureCanvasTkAgg(fig, master=self.graph_panel)
         self.canvas.draw()
@@ -133,3 +157,5 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = CalculadoraApp(root)
     root.mainloop()
+
+    
