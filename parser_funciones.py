@@ -19,11 +19,11 @@ GRAMATICA = r"""
        | atom
 
 ?atom: "-" atom            -> neg
-     | NUMBER              -> numero
-     | "X"                 -> variable
-     | CONST               -> constante
-     | NAME "(" expr ")"   -> funcion
-     | "(" expr ")"
+    | NUMBER              -> numero
+    | "X"                 -> variable
+    | CONST               -> constante
+    | NAME "(" expr ("," expr)? ")"   -> funcion
+    | "(" expr ")"
 
 CONST: "pi" | "e"
 
@@ -96,15 +96,24 @@ class EvaluadorLark(Transformer):
     # ----------- funciones matemáticas -----------
 
     def funcion(self, args):
-        nombre_token, valor = args
+        nombre_token = args[0]
         nombre = str(nombre_token)
+
+        # valor siempre es el primer argumento después del nombre
+        if len(args) == 2:
+            valor = args[1]
+            base = None
+        elif len(args) == 3:
+            valor = args[1]
+            base = args[2]
+        else:
+            raise ValueError(f"Número de argumentos inválido para la función {nombre}")
 
         funciones = {
             "sen": np.sin,
             "sin": np.sin,
             "cos": np.cos,
             "tan": np.tan,
-            "log": np.log,
             "exp": np.exp,
             "sqrt": np.sqrt,
             "sec": lambda t: 1 / np.cos(t),
@@ -116,10 +125,24 @@ class EvaluadorLark(Transformer):
             "sech": lambda t: 1/ np.cosh(t),
             "csch": lambda t: 1/ np.sinh(t),
             "ctgh": lambda t: 1/ np.tanh(t),
+            "abs": np.abs,
+            "log10": np.log10,
+            "ln": np.log,
         }
+
+        if nombre == "log":
+            # log(valor) -> ln(valor)
+            # log(valor, base) -> log base 'base'
+            if base is None:
+                return np.log(valor)
+            else:
+                return np.log(valor) / np.log(base)
 
         if nombre not in funciones:
             raise ValueError(f"Función no soportada: {nombre}")
+
+        if base is not None:
+            raise ValueError(f"Función {nombre} no acepta un segundo argumento de base")
 
         return funciones[nombre](valor)
 
