@@ -5,25 +5,27 @@ import numpy as np
 GRAMATICA = r"""
 ?start: expr
 
-?expr: expr "+" term   -> suma
+?expr: term
+     | expr "+" term   -> suma
      | expr "-" term   -> resta
-     | term
 
-?term: term factor -> mul
+?term: factor
      | term "*" factor -> mul
      | term "/" factor -> div
      | term "x" factor -> mul
-     | factor
+     | term factor     -> mul
 
-?factor: factor "^" atom -> pot
-       | atom
+?factor: atom
+       | factor "^" atom  -> pot
+       | factor "**" atom -> pot
 
 ?atom: "-" atom            -> neg
-    | NUMBER              -> numero
-    | "X"                 -> variable
-    | CONST               -> constante
-    | NAME "(" expr ("," expr)? ")"   -> funcion
-    | "(" expr ")"
+     | NUMBER              -> numero
+     | "X" | "x"           -> variable_x
+     | "T" | "t"           -> variable_t
+     | CONST               -> constante
+     | NAME "(" expr ("," expr)? ")"   -> funcion
+     | "(" expr ")"
 
 CONST: "pi" | "e"
 
@@ -43,9 +45,10 @@ class EvaluadorLark(Transformer):
     en operaciones de NumPy para obtener y = f(x).
     """
 
-    def __init__(self, x: np.ndarray):
+    def __init__(self, x: np.ndarray, t: np.ndarray = None):
         super().__init__()
         self.x = x
+        self.t = t if t is not None else x # Fallback to x if t is not provided? Or just keep it separate.
 
     # ----------- valores básicos -----------
 
@@ -63,9 +66,13 @@ class EvaluadorLark(Transformer):
         else:
             raise ValueError(f"Constante no soportada: {nombre}")
 
-    def variable(self, _):
+    def variable_x(self, _):
         # La variable x se reemplaza por el arreglo de NumPy
         return self.x
+
+    def variable_t(self, _):
+        # La variable t se reemplaza por el arreglo de NumPy
+        return self.t
 
     # ----------- operaciones aritméticas -----------
 
@@ -128,6 +135,7 @@ class EvaluadorLark(Transformer):
             "abs": np.abs,
             "log10": np.log10,
             "ln": np.log,
+            "sign": np.sign,
         }
 
         if nombre == "log":
@@ -147,15 +155,16 @@ class EvaluadorLark(Transformer):
         return funciones[nombre](valor)
 
 
-def evaluar_con_lark(expresion: str, x: np.ndarray) -> np.ndarray:
+def evaluar_con_lark(expresion: str, x: np.ndarray, t: np.ndarray = None) -> np.ndarray:
     """
-    Evalúa una expresión matemática en función de x usando Lark.
+    Evalúa una expresión matemática en función de x o t usando Lark.
 
-    :param expresion: texto de la función, por ejemplo 'sin(x) + x^2'.
-    :param x: arreglo de valores de x donde se quiere evaluar la función.
-    :return: arreglo y = f(x) con el mismo tamaño que x.
+    :param expresion: texto de la función, por ejemplo 'sin(x) + x^2' o 'cos(t)'.
+    :param x: arreglo de valores de x.
+    :param t: arreglo de valores de t.
+    :return: arreglo y = f(x, t) con el mismo tamaño que x o t.
     """
     tree = parser.parse(expresion)
-    evaluador = EvaluadorLark(x)
+    evaluador = EvaluadorLark(x, t)
     y = evaluador.transform(tree)
     return y
